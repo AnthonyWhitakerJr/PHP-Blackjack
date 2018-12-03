@@ -4,24 +4,27 @@ include('functions/index.functions.php');
 
 $game = getGame();
 $availableWagers = Game::getAvailableWagers($user->getBank());
-$dealerHand = $game->getDealerHand();
-$playerHand = $game->getPlayerHand();
-$dealerScore = $game->calculateDealerHand();
-$playerScore = $game->calculatePlayerHand();
 
-$game->reset();
-$game->updateWager(50);
-$game->deal($user->getId(), $database);
+$action = get('action');
 
-$game->hit($user->getId(), $database);
-$playerHand = $game->getPlayerHand();
-$playerScore = $game->calculatePlayerHand();
-
-$game->hit($user->getId(), $database);
-$playerHand = $game->getPlayerHand();
-$playerScore = $game->calculatePlayerHand();
-
-$game->stand($user->getId(), $database);
+switch ($action) {
+    case 'new':
+        $game->reset();
+        break;
+    case 'hit':
+        $game->hit($user->getId(), $database);
+        break;
+    case 'wager':
+        $amount = get('amount');
+        $game->updateWager($amount);
+        break;
+    case 'deal':
+        $game->deal($user->getId(), $database);
+        break;
+    case 'stand':
+        $game->stand($user->getId(), $database);
+        break;
+}
 $dealerHand = $game->getDealerHand();
 $playerHand = $game->getPlayerHand();
 $dealerScore = $game->calculateDealerHand();
@@ -78,6 +81,7 @@ $playerScore = $game->calculatePlayerHand();
     </div>
 </nav>
 
+<!-- Dealer Hand -->
 <div class="text-center">
     <?php for ($i = 0; $i < count($dealerHand); $i++) : ?>
         <?php if (($game->getState() == State::PLACE_WAGER || $game->getState() == State::PLAYER) && $i == '0') : ?>
@@ -90,67 +94,79 @@ $playerScore = $game->calculatePlayerHand();
 </div>
 
 <br/>
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="col-lg"><?php echo $user->getDisplayName() . ': ' . $playerScore ?> </h3>
+        <!-- Game Controls -->
+        <div class="col">
+            <div class="btn-group" role="group" aria-label="Game controls">
+                <?php if ($game->canHit()): ?>
+                    <button type="button" class="btn btn-primary" onclick="location.href='index.php?action=hit'">Hit
+                    </button>
+                <?php else : ?>
+                    <button type="button" class="btn btn-primary disabled" disabled>Hit</button>
+                <?php endif; ?>
 
-<div class="text-center">
-    <div class="btn-group" role="group" aria-label="Game controls">
-        <?php if ($game->canHit()): ?>
-            <button type="button" class="btn btn-primary" onclick="location.href='index.php?action=hit'">Hit</button>
-        <?php else : ?>
-            <button type="button" class="btn btn-primary disabled" disabled>Hit</button>
-        <?php endif; ?>
+                <?php if ($game->canUpdateWager()): ?>
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownWagerButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Wager
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownWagerButton">
+                            <?php foreach ($availableWagers as $wagerOption) : ?>
+                                <?php if ($game->getWager() === $wagerOption): ?>
+                                    <a class="dropdown-item active"
+                                       href="index.php?action=wager&amount=<?php echo $wagerOption ?>">
+                                        <?php echo $wagerOption ?><span class="sr-only">(current)</span>
+                                    </a>
+                                <?php else : ?>
+                                    <a class="dropdown-item"
+                                       href="index.php?action=wager&amount=<?php echo $wagerOption ?>">
+                                        <?php echo $wagerOption ?>
+                                    </a>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php else : ?>
+                    <button class="btn btn-info dropdown-toggle disabled" disabled>
+                        Wager: <?php echo $game->getWager() ?></button>
+                <?php endif; ?>
 
-        <?php if ($game->canUpdateWager()): ?>
-            <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownWagerButton"
-                        data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    Wager
+                <?php if ($game->canDeal()): ?>
+                    <button type="button" class="btn btn-success" onclick="location.href='index.php?action=deal'">Deal
+                    </button>
+                <?php else : ?>
+                    <button type="button" class="btn btn-success disabled" disabled>Deal</button>
+                <?php endif; ?>
+
+                <?php if ($game->canStand()): ?>
+                    <button type="button" class="btn btn-danger" onclick="location.href='index.php?action=stand'">
+                        Stand
+                    </button>
+                <?php else : ?>
+                    <button type="button" class="btn btn-danger disabled" disabled>Stand</button>
+                <?php endif; ?>
+
+                <button type="button" class="btn btn-secondary" onclick="location.href='index.php?action=new'">New Round
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownWagerButton">
-                    <?php foreach ($availableWagers as $wagerOption) : ?>
-                        <?php if ($game->getWager() === $wagerOption): ?>
-                            <a class="dropdown-item active"
-                               href="index.php?action=wager&amount=<?php echo $wagerOption ?>">
-                                <?php echo $wagerOption ?>
-                            </a>
-                        <?php else : ?>
-                            <a class="dropdown-item" href="index.php?action=wager&amount=<?php echo $wagerOption ?>">
-                                <?php echo $wagerOption ?>
-                            </a>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
             </div>
-        <?php else : ?>
-            <button class="btn btn-info dropdown-toggle disabled" disabled>
-                Wager: <?php echo $game->getWager() ?></button>
-        <?php endif; ?>
-
-        <?php if ($game->canDeal()): ?>
-            <button type="button" class="btn btn-success" onclick="location.href='index.php?action=deal'">Deal</button>
-        <?php else : ?>
-            <button type="button" class="btn btn-success disabled" disabled>Deal</button>
-        <?php endif; ?>
-
-        <?php if ($game->canStand()): ?>
-            <button type="button" class="btn btn-danger" onclick="location.href='index.php?action=stand'">Stand</button>
-        <?php else : ?>
-            <button type="button" class="btn btn-danger disabled" disabled>Stand</button>
-        <?php endif; ?>
-
-        <button type="button" class="btn btn-secondary" onclick="location.href='index.php?action=new'">New Round
-        </button>
+        </div>
+        <h3 class="col-lg">Dealer: <?php echo $dealerScore ?> </h3>
     </div>
 </div>
-
 <br/>
 
+<!-- Player Hand -->
 <div class="text-center">
     <?php foreach ($playerHand as $card) : ?>
         <img src="<?php echo $card->getImageLocation() ?>" class="rounded" alt="<?php echo '' . $card ?>">
     <?php endforeach; ?>
 </div>
 
+<!-- Game Log -->
 <div class="fixed-bottom">
     <h3>Game Log</h3>
     <div class="jumbotron" style="height: 250px; overflow:auto;">

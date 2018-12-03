@@ -60,7 +60,7 @@ class Game {
     }
 
     public function canDeal() {
-        return $this->state === State::PLACE_WAGER;
+        return $this->state === State::PLACE_WAGER && $this->wager > 0;
     }
 
     public function canHit() {
@@ -170,6 +170,15 @@ class Game {
             return;
         }
 
+        if ($wager > 500) {
+            $wager = 500;
+        }
+        if ($wager < 50) {
+            $wager = 50;
+        }
+        if ($wager % 50 != 0) {
+            $wager -= $wager % 50;
+        }
         $this->wager = $wager;
     }
 

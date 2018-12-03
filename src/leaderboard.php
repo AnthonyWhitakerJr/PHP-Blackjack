@@ -71,7 +71,7 @@ $leaders = getLeaders($database);
             <th scope="row"><?php echo $leader['rank'] ?></th>
             <td><?php echo $leader['display_name'] ?></td>
             <td><?php echo $leader['username'] ?></td>
-            <td><?php echo $leader['net_earnings'] ?></td>
+            <td>$<?php echo $leader['net_earnings'] ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

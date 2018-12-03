@@ -7,10 +7,10 @@ include('config.php');
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="PHP-Blackjack">
+    <meta name="description" content="PHP-Blackjack Edit Profile">
     <meta name="author" content="Anthony Whitaker">
 
-    <title>PHP-Blackjack</title>
+    <title>Edit Profile</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -28,24 +28,25 @@ include('config.php');
 
     <div class="collapse navbar-collapse" id="navbarPhpBlackjack">
         <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link active" href="index.php">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#">Home</a>
             <a class="nav-item nav-link" href="leaderboard.php">Leaderboard</a>
         </div>
         <div class="navbar-text">
             Bank: $<?php echo $user->getBank() ?>
         </div>
-        <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdownUser" data-toggle="dropdown"
+        <div class="nav-item dropdown active">
+            <a class="nav-link dropdown-toggle" href="index.php" id="dropdownUser" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false"><?php echo $user->getDisplayName() ?></a>
             <div class="dropdown-menu" aria-labelledby="dropdownUser">
-                <a class="dropdown-item" href="profile.php">Edit Profile</a>
+                <a class="dropdown-item active" href="profile.php">Edit Profile <span
+                            class="sr-only">(current)</span></a>
                 <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
         </div>
     </div>
 </nav>
 
-Game goes here.
+Profile page.
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

@@ -7,10 +7,10 @@ include('config.php');
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="PHP-Blackjack">
+    <meta name="description" content="PHP-Blackjack Leaderboard">
     <meta name="author" content="Anthony Whitaker">
 
-    <title>PHP-Blackjack</title>
+    <title>Leaderboard</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -28,8 +28,8 @@ include('config.php');
 
     <div class="collapse navbar-collapse" id="navbarPhpBlackjack">
         <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link active" href="index.php">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="leaderboard.php">Leaderboard</a>
+            <a class="nav-item nav-link" href="index.php">Home</a>
+            <a class="nav-item nav-link active" href="leaderboard.php">Leaderboard<span class="sr-only">(current)</span></a>
         </div>
         <div class="navbar-text">
             Bank: $<?php echo $user->getBank() ?>
@@ -45,7 +45,7 @@ include('config.php');
     </div>
 </nav>
 
-Game goes here.
+Leaderboard
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

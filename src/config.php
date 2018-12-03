@@ -12,7 +12,7 @@ $database = new PDO('mysql:host=localhost:8889;dbname=blackjack', $DB_USER, $DB_
 // Start the session
 session_start();
 
-$customer=[];
+$user = User::getBlankUser();
 
 $current_url = basename($_SERVER['REQUEST_URI']);
 

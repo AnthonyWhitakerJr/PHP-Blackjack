@@ -1,5 +1,11 @@
 <?php
 include('config.php');
+include('functions/findPlayers.functions.php');
+include('functions/ranking.functions.php');
+
+updateRankings($database);
+$term = get('search-term');
+$players = searchPlayers($term, $database);
 
 ?>
 <!doctype html>
@@ -53,7 +59,31 @@ include('config.php');
     </div>
 </nav>
 
-Form here.
+<h1>Players</h1>
+<form method="GET">
+    <input type="text" name="search-term" placeholder="Search..." />
+    <input type="submit" />
+</form>
+<table class="table table-responsive-md">
+    <thead>
+    <tr>
+        <th scope="col">Rank</th>
+        <th scope="col">Display Name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Earnings</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($players as $player) : ?>
+        <tr>
+            <th scope="row"><?php echo $player['rank'] ?></th>
+            <td><?php echo $player['display_name'] ?></td>
+            <td><?php echo $player['username'] ?></td>
+            <td>$<?php echo $player['net_earnings'] ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

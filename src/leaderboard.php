@@ -1,7 +1,9 @@
 <?php
 include('config.php');
 include('functions/leaderboard.functions.php');
+include('functions/ranking.functions.php');
 
+updateRankings($database);
 $leaders = getLeaders($database);
 ?>
 <!doctype html>

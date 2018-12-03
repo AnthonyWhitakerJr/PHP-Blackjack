@@ -1,7 +1,13 @@
 <?php
 include('config.php');
+include('functions/index.functions.php');
 
-$game = new Game();
+$game = getGame();
+$availableWagers = Game::getAvailableWagers($user->getBank());
+$dealerHand = $game->getDealerHand();
+$playerHand = $game->getPlayerHand();
+$dealerScore = $game->calculateDealerHand();
+$playerScore = $game->calculatePlayerHand();
 ?>
 <!doctype html>
 <html lang="en">
@@ -54,14 +60,8 @@ $game = new Game();
 </nav>
 
 <?php
-$availableWagers = Game::getAvailableWagers($user->getBank());
-
 $game->updateWager(50);
 $game->deal($user->getId(), $database);
-$dealerHand = $game->getDealerHand();
-$playerHand = $game->getPlayerHand();
-$dealerScore = $game->calculateDealerHand();
-$playerScore = $game->calculatePlayerHand();
 
 $game->hit($user->getId(), $database);
 $playerHand = $game->getPlayerHand();
@@ -72,7 +72,30 @@ $playerHand = $game->getPlayerHand();
 $playerScore = $game->calculatePlayerHand();
 
 $game->stand($user->getId(), $database);
+$dealerHand = $game->getDealerHand();
+$playerHand = $game->getPlayerHand();
+$dealerScore = $game->calculateDealerHand();
+$playerScore = $game->calculatePlayerHand();
 ?>
+
+<div class="text-center">
+    <?php for ($i = 0; $i < count($dealerHand); $i++) : ?>
+        <?php if (($game->getState() == State::DEALER || $game->getState() == State::ROUND_END) && $i == '0') : ?>
+            <img src="<?php echo $user->getCardBackLocation() ?>" class="rounded" alt="Face down card.">
+        <?php else : ?>
+            <?php $card = $dealerHand[$i] ?>
+            <img src="<?php echo $card->getImageLocation() ?>" class="rounded" alt="<?php echo '' . $card ?>">
+        <?php endif; ?>
+    <?php endfor; ?>
+</div>
+
+
+<div class="text-center">
+    <?php foreach ($playerHand as $card) : ?>
+        <img src="<?php echo $card->getImageLocation() ?>" class="rounded" alt="<?php echo '' . $card ?>">
+    <?php endforeach; ?>
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

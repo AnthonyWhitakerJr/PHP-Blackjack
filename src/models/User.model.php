@@ -93,5 +93,8 @@ class User {
         return $this->last_active;
     }
 
+    public function getCardBackLocation() {
+        return "assets/card-backs/teal.png";
+    }
 
 }

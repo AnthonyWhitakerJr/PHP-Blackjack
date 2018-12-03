@@ -243,23 +243,37 @@ class Game {
     }
 
     /**
-     * @return int
-     */
-    public function getWager() {
-        return $this->wager;
-    }
-
-    /**
-     * @return array
+     * @return Card[]
      */
     public function getDealerHand() {
         return $this->dealerHand;
     }
 
     /**
-     * @return array
+     * @return string[]
+     */
+    public function getGameLog(): array {
+        return $this->gameLog;
+    }
+
+    /**
+     * @return Card[]
      */
     public function getPlayerHand() {
         return $this->playerHand;
+    }
+
+    /**
+     * @return State
+     */
+    public function getState(): State {
+        return $this->state;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWager() {
+        return $this->wager;
     }
 }

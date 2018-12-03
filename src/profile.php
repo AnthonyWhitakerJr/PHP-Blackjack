@@ -1,7 +1,7 @@
 <?php
 include('config.php');
 
-$action = get('action');
+$action = post('action');
 
 
 ?>

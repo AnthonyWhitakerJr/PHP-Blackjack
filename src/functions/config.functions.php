@@ -8,6 +8,14 @@ function get($key) {
     }
 }
 
+function post($key) {
+    if (isset($_POST[$key])) {
+        return $_POST[$key];
+    } else {
+        return '';
+    }
+}
+
 function getUser($userId, $database) {
     $sql = file_get_contents('sql/getUser.sql');
     $params = array(

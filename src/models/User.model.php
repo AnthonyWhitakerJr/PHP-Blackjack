@@ -38,56 +38,56 @@ class User {
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId() {
         return $this->id;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername() {
         return $this->username;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDisplayName() {
         return $this->display_name;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getProfilePicUri() {
         return $this->profile_pic_uri;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getBank() {
         return $this->bank;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getNetEarnings() {
         return $this->net_earnings;
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      */
     public function getLastBorrow() {
         return $this->last_borrow;
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      */
     public function getLastActive() {
         return $this->last_active;

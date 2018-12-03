@@ -53,7 +53,26 @@ $game = new Game();
     </div>
 </nav>
 
-Game goes here.
+<?php
+$availableWagers = Game::getAvailableWagers($user->getBank());
+
+$game->updateWager(50);
+$game->deal($user->getId(), $database);
+$dealerHand = $game->getDealerHand();
+$playerHand = $game->getPlayerHand();
+$dealerScore = $game->calculateDealerHand();
+$playerScore = $game->calculatePlayerHand();
+
+$game->hit($user->getId(), $database);
+$playerHand = $game->getPlayerHand();
+$playerScore = $game->calculatePlayerHand();
+
+$game->hit($user->getId(), $database);
+$playerHand = $game->getPlayerHand();
+$playerScore = $game->calculatePlayerHand();
+
+
+?>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

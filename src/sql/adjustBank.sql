@@ -1,3 +1,3 @@
 UPDATE users
-SET bank = bank - :wager
+SET bank = bank - :amount
 where id = :userId;

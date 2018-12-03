@@ -7,7 +7,7 @@ abstract class Suit {
     const HEARTS = "hearts";
     const SPADES = "spades";
 
-    private static const values = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES];
+    private const values = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES];
 
     /**
      * @return string

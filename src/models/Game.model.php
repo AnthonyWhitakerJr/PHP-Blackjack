@@ -46,7 +46,7 @@ class Game {
 
     public function calculateDealerHand() {
         if ($this->state === State::PLAYER) {
-            return $this->dealerHand[1];
+            return $this->dealerHand[1]->getValue();
         }
 
         return $this->calculateHand($this->dealerHand);
@@ -71,14 +71,20 @@ class Game {
 
         $this->dealerHand[] = GameDeck::getNextCard();
         $this->dealerHand[] = GameDeck::getNextCard();
+        $this->log("Dealer is dealt a " . $this->dealerHand[1] . ".");
+        $this->log("Dealer has " . $this->calculateDealerHand());
 
         $this->playerHand[] = GameDeck::getNextCard();
         $this->playerHand[] = GameDeck::getNextCard();
+        $this->log("Player is dealt a " . $this->playerHand[0] . " and a " . $this->playerHand[1] . ".");
 
-        if ($this->calculatePlayerHand() == 21) {
+        $playerScore = $this->calculatePlayerHand();
+        if ($playerScore == 21) {
             $this->playerHasBlackjack = true;
             $this->log('Player has blackjack!');
             $this->stand($userId, $database);
+        } else {
+            $this->log("Player has " . $playerScore);
         }
     }
 
@@ -89,6 +95,7 @@ class Game {
 
         $this->playerHand[] = GameDeck::getNextCard();
         $this->log("Player hits.");
+        $this->log("Player is dealt a " . $this->lastCard($this->playerHand) . ".");
 
         $playerScore = $this->calculatePlayerHand();
         $this->log("Player has " . $playerScore);
@@ -119,9 +126,15 @@ class Game {
             $this->log("Player stands at " . $playerScore . ".");
         }
 
+
+        $this->log("Dealer reveals a " . $this->dealerHand[0]);
+        $dealerScore = $this->calculateDealerHand();
+        $this->log("Dealer has " . $dealerScore);
+
         do {
             $this->dealerHand[] = GameDeck::getNextCard();
             $this->log("Dealer hits.");
+            $this->log("Dealer is dealt a " . $this->lastCard($this->dealerHand) . ".");
 
             $dealerScore = $this->calculateDealerHand();
             $this->log("Dealer has " . $dealerScore);
@@ -168,7 +181,7 @@ class Game {
                 $total += 11;
                 $hasAce = true;
             } else {
-                $total += $card->getRank();
+                $total += $card->getValue();
             }
         }
         if ($total > 21 && $hasAce) {
@@ -203,8 +216,21 @@ class Game {
         $this->state = State::ROUND_END;
     }
 
+    /**
+     * @param $cards Card[]
+     * @return Card
+     */
+    private function lastCard($cards) {
+        $card = end($cards);
+        reset($cards);
+        return $card;
+    }
+
+    //TODO Log display name.
     private function log($message) {
         $this->gameLog[] = $message;
+        error_log($message);
+        echo '<script>console.log(' . $message . ')</script>';
     }
 
     /**

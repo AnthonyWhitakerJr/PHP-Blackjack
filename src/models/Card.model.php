@@ -20,6 +20,13 @@ class Card {
         return "/assets/cards/" . $this->suit . "/" . $this->rank;
     }
 
+    public function getValue() {
+        if ($this->rank >= 10) {
+            return 10;
+        }
+        return $this->rank;
+    }
+
     public function __toString() {
         return Rank::toString($this->rank) . ' of ' . ucfirst($this->suit);
     }
@@ -37,6 +44,4 @@ class Card {
     public function getRank() {
         return $this->rank;
     }
-
-
 }

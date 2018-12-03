@@ -1,8 +1,14 @@
 <?php
 include('config.php');
+include('functions/profile.functions.php');
 
 $action = post('action');
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $displayName = $_POST['inputDisplayName'];
+
+    updateDisplayName($user->getId(), $displayName, $database);
+}
 
 ?>
 <!doctype html>
@@ -56,7 +62,7 @@ $action = post('action');
     </div>
 </nav>
 
-<form>
+<form method="POST">
     <div class="form-group row">
         <label for="username" class="col-sm-2 col-form-label">Username</label>
         <div class="col-sm-10">
@@ -83,6 +89,11 @@ $action = post('action');
                    value="<?php echo $user->getNetEarnings() ?>">
         </div>
     </div>
+    <?php if ($action === 'edit') : ?>
+    <button type="submit" class="btn btn-success">Save</button>
+    <?php else: ?>
+    <button type="button" class="btn btn-primary" onclick="location.href='profile.php?action=edit'">Edit</button>
+    <?php endif; ?>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

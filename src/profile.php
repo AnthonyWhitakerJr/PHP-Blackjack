@@ -64,40 +64,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </nav>
-
-<form method="POST">
-    <div class="form-group row">
-        <label for="username" class="col-sm-2 col-form-label">Username</label>
-        <div class="col-sm-10">
-            <input type="text" readonly class="form-control-plaintext" id="username"
-                   value="<?php echo $user->getUsername() ?>">
+<div class="container">
+    <form method="POST">
+        <div class="form-group row">
+            <label for="username" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="username"
+                       value="<?php echo $user->getUsername() ?>">
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="displayName" class="col-sm-2 col-form-label">Display Name</label>
-        <div class="col-sm-10">
-            <?php if ($action == 'edit') : ?>
-                <input type="text" class="form-control" id="displayName" name="inputDisplayName"
-                       placeholder="Display Name" value="<?php echo $user->getDisplayName() ?>">
-            <?php else : ?>
-                <input type="text" readonly class="form-control" id="displayName" name="inputDisplayName"
-                       placeholder="Display Name" value="<?php echo $user->getDisplayName() ?>">
-            <?php endif; ?>
+        <div class="form-group row">
+            <label for="displayName" class="col-sm-2 col-form-label">Display Name</label>
+            <div class="col-sm-10">
+                <?php if ($action == 'edit') : ?>
+                    <input type="text" class="form-control" id="displayName" name="inputDisplayName"
+                           placeholder="Display Name" value="<?php echo $user->getDisplayName() ?>">
+                <?php else : ?>
+                    <input type="text" readonly class="form-control" id="displayName" name="inputDisplayName"
+                           placeholder="Display Name" value="<?php echo $user->getDisplayName() ?>">
+                <?php endif; ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="earnings" class="col-sm-2 col-form-label">Net Earnings</label>
-        <div class="col-sm-10">
-            <input type="text" readonly class="form-control-plaintext" id="earnings"
-                   value="<?php echo $user->getNetEarnings() ?>">
+        <div class="form-group row">
+            <label for="earnings" class="col-sm-2 col-form-label">Net Earnings</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="earnings"
+                       value="<?php echo $user->getNetEarnings() ?>">
+            </div>
         </div>
-    </div>
-    <?php if ($action === 'edit') : ?>
-    <button type="submit" class="btn btn-success">Save</button>
-    <?php else: ?>
-    <button type="button" class="btn btn-primary" onclick="location.href='profile.php?action=edit'">Edit</button>
-    <?php endif; ?>
-</form>
+        <?php if ($action === 'edit') : ?>
+            <button type="submit" class="btn btn-success">Save</button>
+        <?php else: ?>
+            <button type="button" class="btn btn-primary" onclick="location.href='profile.php?action=edit'">Edit
+            </button>
+        <?php endif; ?>
+    </form>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

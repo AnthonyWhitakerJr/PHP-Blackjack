@@ -1,16 +1,19 @@
 <?php
 include('config.php');
 
+$action = get('action');
+
+
 ?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="PHP-Blackjack Edit Profile">
+    <meta name="description" content="PHP-Blackjack Profile">
     <meta name="author" content="Anthony Whitaker">
 
-    <title>Edit Profile</title>
+    <title>Profile</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -45,7 +48,7 @@ include('config.php');
             <a class="nav-link dropdown-toggle active" href="index.php" id="dropdownUser" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false"><?php echo $user->getDisplayName() ?></a>
             <div class="dropdown-menu" aria-labelledby="dropdownUser">
-                <a class="dropdown-item active" href="profile.php">Edit Profile <span
+                <a class="dropdown-item active" href="profile.php">Profile <span
                             class="sr-only">(current)</span></a>
                 <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
@@ -53,7 +56,34 @@ include('config.php');
     </div>
 </nav>
 
-Profile page.
+<form>
+    <div class="form-group row">
+        <label for="username" class="col-sm-2 col-form-label">Username</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="username"
+                   value="<?php echo $user->getUsername() ?>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="displayName" class="col-sm-2 col-form-label">Display Name</label>
+        <div class="col-sm-10">
+            <?php if ($action == 'edit') : ?>
+                <input type="text" class="form-control" id="displayName" name="inputDisplayName"
+                       placeholder="Display Name" value="<?php echo $user->getDisplayName() ?>">
+            <?php else : ?>
+                <input type="text" readonly class="form-control" id="displayName" name="inputDisplayName"
+                       placeholder="Display Name" value="<?php echo $user->getDisplayName() ?>">
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="earnings" class="col-sm-2 col-form-label">Net Earnings</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="earnings"
+                   value="<?php echo $user->getNetEarnings() ?>">
+        </div>
+    </div>
+</form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

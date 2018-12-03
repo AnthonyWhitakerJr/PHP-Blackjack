@@ -48,7 +48,7 @@ $leaders = getLeaders($database);
             <a class="nav-link dropdown-toggle" href="#" id="dropdownUser" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false"><?php echo $user->getDisplayName() ?></a>
             <div class="dropdown-menu" aria-labelledby="dropdownUser">
-                <a class="dropdown-item" href="profile.php">Edit Profile</a>
+                <a class="dropdown-item" href="profile.php">Profile</a>
                 <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
         </div>

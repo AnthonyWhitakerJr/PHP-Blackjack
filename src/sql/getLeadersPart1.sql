@@ -1,0 +1,1 @@
+SELECT @rank := 0;

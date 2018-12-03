@@ -1,6 +1,8 @@
 <?php
 include('config.php');
+include('functions/leaderboard.functions.php');
 
+$leaders = getLeaders($database);
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,36 +47,26 @@ include('config.php');
     </div>
 </nav>
 
-Leaderboard
+<h1>Leaderboard</h1>
 
-<table class="table">
+<table class="table table-responsive-md">
     <thead>
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col">Rank</th>
+        <th scope="col">Display Name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Earnings</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-    </tr>
-    <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-    </tr>
-    <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-    </tr>
+    <?php foreach ($leaders as $leader) : ?>
+        <tr>
+            <th scope="row"><?php echo $leader['rank'] ?></th>
+            <td><?php echo $leader['display_name'] ?></td>
+            <td><?php echo $leader['username'] ?></td>
+            <td><?php echo $leader['net_earnings'] ?></td>
+        </tr>
+    <?php endforeach; ?>
     </tbody>
 </table>
 

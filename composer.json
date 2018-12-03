@@ -1,0 +1,22 @@
+{
+  "name": "anthonywhitakerjr/php-blackjack",
+  "keywords": [
+    "php",
+    "blackjack"
+  ],
+  "authors": [
+    {
+      "name": "Anthony Whitaker",
+      "email": "AnthonyWhitakerJr@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "php-ds/php-ds": "1.2.0",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.1"
+  },
+  "minimum-stability": "dev"
+}

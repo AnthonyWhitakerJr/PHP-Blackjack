@@ -1,31 +1,31 @@
 <?php
 
 class Game {
-    /**
-     * @var int
-     */
-    private $wager;
+
     /**
      * @var Card[]
      */
     private $dealerHand;
     /**
+     * @var string[]
+     */
+    private $gameLog;
+    /**
      * @var Card[]
      */
     private $playerHand;
+    /**
+     * @var bool
+     */
+    private $playerHasBlackjack;
     /**
      * @var State
      */
     private $state;
     /**
-     * @var string[]
+     * @var int
      */
-    private $gameLog;
-
-    /**
-     * @var bool
-     */
-    private $playerHasBlackjack;
+    private $wager;
 
     /**
      * Game constructor.
@@ -36,15 +36,6 @@ class Game {
         $this->reset();
     }
 
-
-    public function reset() {
-        $this->wager = 0;
-        $this->dealerHand = array();
-        $this->playerHand = array();
-        $this->state = State::PLACE_WAGER;
-        $this->playerHasBlackjack = false;
-    }
-
     public static function getAvailableWagers($bank) {
         $availableWagers = array();
         for ($i = 50; $i <= 500 && $i <= $bank; $i += 50) {
@@ -53,8 +44,24 @@ class Game {
         return $availableWagers;
     }
 
-    public function updateWager($wager) {
-        $this->wager = $wager;
+    public function calculateDealerHand() {
+        if ($this->state === State::PLAYER) {
+            return $this->dealerHand[1];
+        }
+
+        return $this->calculateHand($this->dealerHand);
+    }
+
+    public function calculatePlayerHand() {
+        return $this->calculateHand($this->playerHand);
+    }
+
+    public function canHit() {
+        return $this->state == State::PLAYER && $this->calculatePlayerHand() < 21;
+    }
+
+    public function canStand() {
+        return $this->state == State::PLAYER;
     }
 
     public function deal($userId, $database) {
@@ -75,53 +82,42 @@ class Game {
         }
     }
 
-    public function canHit() {
-        return $this->state == State::PLAYER && $this->calculatePlayerHand() < 21;
-    }
-
-    /**
-     * @param $userId int
-     * @param $database PDO
-     */
-    private function placeWager($userId, $database) {
-        $amount = -1 * $this->wager;
-        $this->adjustBank($amount, $userId, $database);
-    }
-
-
-    private function adjustBank($amount, $userId, $database) {
-        $sql = file_get_contents('sql/adjustBank.sql');
-        $params = array(
-            'userId' => $userId,
-            'amount' => $amount
-        );
-
-        $statement = $database->prepare($sql);
-        $statement->execute($params);
-    }
-
     public function hit($userId, $database) {
-        if ($this->canHit()) {
-            $this->playerHand[] = GameDeck::getNextCard();
-            $this->log("Player hits.");
-
-            $playerScore = $this->calculatePlayerHand();
-            $this->log("Player has " . $playerScore);
-            if ($playerScore == 21) {
-                $this->stand($userId, $database);
-            } elseif ($playerScore > 21) {
-                $this->log("Player busts.");
-                $this->stand($userId, $database);
-            }
+        if (!$this->canHit()) {
+            return;
         }
+
+        $this->playerHand[] = GameDeck::getNextCard();
+        $this->log("Player hits.");
+
+        $playerScore = $this->calculatePlayerHand();
+        $this->log("Player has " . $playerScore);
+        if ($playerScore >= 21) {
+            $this->stand($userId, $database);
+        }
+
     }
 
-    private function log($message) {
-        $this->gameLog[] = $message;
+    public function reset() {
+        $this->wager = 0;
+        $this->dealerHand = array();
+        $this->playerHand = array();
+        $this->state = State::PLACE_WAGER;
+        $this->playerHasBlackjack = false;
     }
 
     public function stand($userId, $database) {
+        if (!$this->canStand()) {
+            return;
+        }
+
         $this->state = State::DEALER;
+        $playerScore = $this->calculatePlayerHand();
+        if ($playerScore > 21) {
+            $this->log("Player busts.");
+        } else {
+            $this->log("Player stands at " . $playerScore . ".");
+        }
 
         do {
             $this->dealerHand[] = GameDeck::getNextCard();
@@ -133,9 +129,52 @@ class Game {
 
         if ($dealerScore > 21) {
             $this->log("Dealer busts.");
+        } else {
+            $this->log("Dealer stands at " . $dealerScore . ".");
         }
 
         $this->endRound($userId, $database);
+    }
+
+    public function updateWager($wager) {
+        $this->wager = $wager;
+    }
+
+    /**
+     * @param $amount $int
+     * @param $userId $int
+     * @param $database PDO
+     */
+    private function adjustBank($amount, $userId, $database) {
+        $sql = file_get_contents('sql/adjustBank.sql');
+        $params = array(
+            'userId' => $userId,
+            'amount' => $amount
+        );
+
+        $statement = $database->prepare($sql);
+        $statement->execute($params);
+    }
+
+    /**
+     * @param $hand Card[]
+     * @return int
+     */
+    private function calculateHand($hand) {
+        $total = 0;
+        $hasAce = false;
+        foreach ($hand as $card) {
+            if ($card->getRank() == Rank::ACE && !$hasAce) {
+                $total += 11;
+                $hasAce = true;
+            } else {
+                $total += $card->getRank();
+            }
+        }
+        if ($total > 21 && $hasAce) {
+            $total -= 10;
+        }
+        return $total;
     }
 
     private function endRound($userId, $database) {
@@ -161,40 +200,20 @@ class Game {
             $this->log("House wins.");
         }
 
-        $this->state = State::PLACE_WAGER;
+        $this->state = State::ROUND_END;
     }
 
-    public function calculateDealerHand() {
-        if ($this->state === State::PLAYER) {
-            return $this->dealerHand[1];
-        }
-
-        return $this->calculateHand($this->dealerHand);
+    private function log($message) {
+        $this->gameLog[] = $message;
     }
 
     /**
-     * @param $hand Card[]
-     * @return int
+     * @param $userId int
+     * @param $database PDO
      */
-    private function calculateHand($hand) {
-        $total = 0;
-        $hasAce = false;
-        foreach ($hand as $card) {
-            if ($card->getRank() == Rank::ACE && !$hasAce) {
-                $total += 11;
-                $hasAce = true;
-            } else {
-                $total += $card->getRank();
-            }
-        }
-        if ($total > 21 && $hasAce) {
-            $total -= 10;
-        }
-        return $total;
-    }
-
-    public function calculatePlayerHand() {
-        return $this->calculateHand($this->playerHand);
+    private function placeWager($userId, $database) {
+        $amount = -1 * $this->wager;
+        $this->adjustBank($amount, $userId, $database);
     }
 
     /**

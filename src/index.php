@@ -71,7 +71,7 @@ $game->hit($user->getId(), $database);
 $playerHand = $game->getPlayerHand();
 $playerScore = $game->calculatePlayerHand();
 
-
+$game->stand($user->getId(), $database);
 ?>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -2,12 +2,15 @@
 include('config.php');
 include('functions/profile.functions.php');
 
-$action = post('action');
+$action = get('action');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $displayName = $_POST['inputDisplayName'];
 
     updateDisplayName($user->getId(), $displayName, $database);
+    // Redirect to the index.php file
+    header('location: index.php');
+    die();
 }
 
 ?>

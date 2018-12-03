@@ -15,7 +15,7 @@ function createUser($username, $password, $displayName, $database) {
     $params = array(
         'username' => $username,
         'password' => $password,
-        'displayName' => $displayName
+        'display_name' => $displayName
     );
 
     $statement = $database->prepare($sql);

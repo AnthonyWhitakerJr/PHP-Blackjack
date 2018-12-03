@@ -1,6 +1,7 @@
 <?php
 include('config.php');
 include('functions/signup.functions.php');
+include('functions/login.functions.php');
 
 $messages = array();
 

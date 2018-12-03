@@ -112,7 +112,7 @@ $playerScore = $game->calculatePlayerHand();
                         <button class="btn btn-info dropdown-toggle" type="button" id="dropdownWagerButton"
                                 data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                            Wager
+                            Wager: <?php echo $game->getWager() ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownWagerButton">
                             <?php foreach ($availableWagers as $wagerOption) : ?>

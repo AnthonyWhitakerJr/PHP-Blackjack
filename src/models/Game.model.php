@@ -32,7 +32,6 @@ class Game {
      * @param $gameLog
      */
     public function __construct() {
-        $this->gameLog = array();
         $this->reset();
     }
 
@@ -56,6 +55,10 @@ class Game {
         return $this->calculateHand($this->playerHand);
     }
 
+    public function canDeal() {
+        return $this->state === State::PLACE_WAGER;
+    }
+
     public function canHit() {
         return $this->state == State::PLAYER && $this->calculatePlayerHand() < 21;
     }
@@ -64,7 +67,15 @@ class Game {
         return $this->state == State::PLAYER;
     }
 
+    public function canUpdateWager() {
+        return $this->state === State::PLACE_WAGER;
+    }
+
     public function deal($userId, $database) {
+        if (!$this->canDeal()) {
+            return;
+        }
+
         $this->state = State::PLAYER;
         $this->placeWager($userId, $database);
         $this->log("Player wagers $" . $this->wager);
@@ -106,6 +117,7 @@ class Game {
     }
 
     public function reset() {
+        $this->gameLog = array();
         $this->wager = 0;
         $this->dealerHand = array();
         $this->playerHand = array();
@@ -150,6 +162,10 @@ class Game {
     }
 
     public function updateWager($wager) {
+        if (!$this->canUpdateWager()) {
+            return;
+        }
+
         $this->wager = $wager;
     }
 
@@ -266,7 +282,7 @@ class Game {
     /**
      * @return State
      */
-    public function getState(): State {
+    public function getState() {
         return $this->state;
     }
 

@@ -17,7 +17,7 @@ class Card {
     }
 
     public function getImageLocation() {
-        return "/assets/cards/" . $this->suit . "/" . $this->rank;
+        return "assets/cards/" . $this->suit . "/" . $this->rank . ".png";
     }
 
     public function getValue() {

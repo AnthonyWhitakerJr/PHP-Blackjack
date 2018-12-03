@@ -60,6 +60,7 @@ $playerScore = $game->calculatePlayerHand();
 </nav>
 
 <?php
+$game->reset();
 $game->updateWager(50);
 $game->deal($user->getId(), $database);
 
@@ -80,7 +81,7 @@ $playerScore = $game->calculatePlayerHand();
 
 <div class="text-center">
     <?php for ($i = 0; $i < count($dealerHand); $i++) : ?>
-        <?php if (($game->getState() == State::DEALER || $game->getState() == State::ROUND_END) && $i == '0') : ?>
+        <?php if (($game->getState() == State::PLACE_WAGER || $game->getState() == State::PLAYER) && $i == '0') : ?>
             <img src="<?php echo $user->getCardBackLocation() ?>" class="rounded" alt="Face down card.">
         <?php else : ?>
             <?php $card = $dealerHand[$i] ?>
@@ -93,6 +94,12 @@ $playerScore = $game->calculatePlayerHand();
 <div class="text-center">
     <?php foreach ($playerHand as $card) : ?>
         <img src="<?php echo $card->getImageLocation() ?>" class="rounded" alt="<?php echo '' . $card ?>">
+    <?php endforeach; ?>
+</div>
+
+<div>
+    <?php foreach ($game->getGameLog() as $message) : ?>
+        <p><?php echo $message ?></p>
     <?php endforeach; ?>
 </div>
 

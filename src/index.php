@@ -29,7 +29,14 @@ include('config.php');
     <div class="collapse navbar-collapse" id="navbarPhpBlackjack">
         <div class="navbar-nav mr-auto">
             <a class="nav-item nav-link active" href="index.php">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="leaderboard.php">Leaderboard</a>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownRanking" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">Leaderboard</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownRanking">
+                    <a class="dropdown-item" href="leaderboard.php">Top Players</a>
+                    <a class="dropdown-item" href="findPlayers.php">Find Players</a>
+                </div>
+            </div>
         </div>
         <div class="navbar-text">
             Bank: $<?php echo $user->getBank() ?>

@@ -1,18 +1,16 @@
 <?php
 include('config.php');
-include('functions/leaderboard.functions.php');
 
-$leaders = getLeaders($database);
 ?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="PHP-Blackjack Leaderboard">
+    <meta name="description" content="PHP-Blackjack">
     <meta name="author" content="Anthony Whitaker">
 
-    <title>Leaderboard</title>
+    <title>PHP-Blackjack</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -35,9 +33,9 @@ $leaders = getLeaders($database);
                 <a class="nav-link dropdown-toggle active" href="#" id="dropdownRanking" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">Leaderboard</a>
                 <div class="dropdown-menu active" aria-labelledby="dropdownRanking">
-                    <a class="dropdown-item active" href="leaderboard.php">Top Players<span
+                    <a class="dropdown-item" href="leaderboard.php">Top Players</a>
+                    <a class="dropdown-item active" href="findPlayers.php">Find Players<span
                                 class="sr-only">(current)</span></a>
-                    <a class="dropdown-item" href="findPlayers.php">Find Players</a>
                 </div>
             </div>
         </div>
@@ -55,27 +53,7 @@ $leaders = getLeaders($database);
     </div>
 </nav>
 
-<h1>Top Players</h1>
-<table class="table table-responsive-md">
-    <thead>
-    <tr>
-        <th scope="col">Rank</th>
-        <th scope="col">Display Name</th>
-        <th scope="col">Username</th>
-        <th scope="col">Earnings</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($leaders as $leader) : ?>
-        <tr>
-            <th scope="row"><?php echo $leader['rank'] ?></th>
-            <td><?php echo $leader['display_name'] ?></td>
-            <td><?php echo $leader['username'] ?></td>
-            <td><?php echo $leader['net_earnings'] ?></td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+Form here.
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

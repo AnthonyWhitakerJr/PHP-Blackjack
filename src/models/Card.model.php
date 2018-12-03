@@ -23,4 +23,20 @@ class Card {
     public function __toString() {
         return Rank::toString($this->rank) . ' of ' . ucfirst($this->suit);
     }
+
+    /**
+     * @return Suit
+     */
+    public function getSuit() {
+        return $this->suit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRank() {
+        return $this->rank;
+    }
+
+
 }

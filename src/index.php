@@ -1,6 +1,7 @@
 <?php
 include('config.php');
 
+$game = new Game();
 ?>
 <!doctype html>
 <html lang="en">

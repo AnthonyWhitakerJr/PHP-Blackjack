@@ -1,5 +1,4 @@
 <?php
-
 include('config.php');
 include('functions/login.functions.php');
 
@@ -20,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Redirect to the index.php file
         header('location: index.php');
         die();
+    } else {
+        echo "DENIED!"; //TODO Move to message.
     }
 }
 
@@ -48,12 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <div class="form-label-group">
-        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-        <label for="inputEmail">Email address</label>
+        <input type="text" id="inputUsername" name="inputUsername" class="form-control" placeholder="Username" required
+               autofocus>
+        <label for="inputUsername">Username</label>
     </div>
 
     <div class="form-label-group">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password"
+               required>
         <label for="inputPassword">Password</label>
     </div>
 

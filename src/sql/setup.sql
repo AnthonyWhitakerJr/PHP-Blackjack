@@ -8,6 +8,6 @@ create table users
   bank            int          not null default 1000,
   net_earnings    int          not null default 0,
   last_borrow     datetime     not null default now(),
-  last_active     datetime     not null on update now(),
+  last_active     datetime     not null default now() on update now(),
   unique key `username_UNIQUE` (`username` ASC)
 );

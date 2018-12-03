@@ -7,7 +7,7 @@ include('functions/config.functions.php');
 $DB_USER = "root";
 $DB_PASSWORD = "root";
 
-$database = new PDO('mysql:host=csweb.hh.nku.edu;dbname=db_fall18_whitakera2', $DB_USER, $DB_PASSWORD);
+$database = new PDO('mysql:host=localhost:8889;dbname=blackjack', $DB_USER, $DB_PASSWORD);
 
 // Start the session
 session_start();
@@ -18,7 +18,7 @@ $current_url = basename($_SERVER['REQUEST_URI']);
 
 // if userId is not set in the session and current URL not login.php redirect to login page
 
-if(!isset($_SESSION['userId']) && $current_url != 'login.php') {
+if (!isset($_SESSION['userId']) && $current_url != 'login.php' && $current_url != 'signup.php') {
     header('location: login.php');
     die();
 }

@@ -1,0 +1,5 @@
+<?php
+
+?>
+
+Sign up page

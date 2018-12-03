@@ -35,6 +35,10 @@ class Game {
         $this->reset();
     }
 
+    /**
+     * @param $bank
+     * @return int[]
+     */
     public static function getAvailableWagers($bank) {
         $availableWagers = array();
         for ($i = 50; $i <= 500 && $i <= $bank; $i += 50) {

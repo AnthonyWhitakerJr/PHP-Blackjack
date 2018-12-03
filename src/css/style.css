@@ -1,0 +1,8 @@
+body {
+    background: url("../assets/table-tops/green-felt.png") repeat;
+}
+
+jumbotron {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

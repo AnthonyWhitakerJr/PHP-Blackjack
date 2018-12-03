@@ -8,6 +8,24 @@ $dealerHand = $game->getDealerHand();
 $playerHand = $game->getPlayerHand();
 $dealerScore = $game->calculateDealerHand();
 $playerScore = $game->calculatePlayerHand();
+
+$game->reset();
+$game->updateWager(50);
+$game->deal($user->getId(), $database);
+
+$game->hit($user->getId(), $database);
+$playerHand = $game->getPlayerHand();
+$playerScore = $game->calculatePlayerHand();
+
+$game->hit($user->getId(), $database);
+$playerHand = $game->getPlayerHand();
+$playerScore = $game->calculatePlayerHand();
+
+$game->stand($user->getId(), $database);
+$dealerHand = $game->getDealerHand();
+$playerHand = $game->getPlayerHand();
+$dealerScore = $game->calculateDealerHand();
+$playerScore = $game->calculatePlayerHand();
 ?>
 <!doctype html>
 <html lang="en">
@@ -23,6 +41,7 @@ $playerScore = $game->calculatePlayerHand();
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
@@ -59,26 +78,6 @@ $playerScore = $game->calculatePlayerHand();
     </div>
 </nav>
 
-<?php
-$game->reset();
-$game->updateWager(50);
-$game->deal($user->getId(), $database);
-
-$game->hit($user->getId(), $database);
-$playerHand = $game->getPlayerHand();
-$playerScore = $game->calculatePlayerHand();
-
-$game->hit($user->getId(), $database);
-$playerHand = $game->getPlayerHand();
-$playerScore = $game->calculatePlayerHand();
-
-$game->stand($user->getId(), $database);
-$dealerHand = $game->getDealerHand();
-$playerHand = $game->getPlayerHand();
-$dealerScore = $game->calculateDealerHand();
-$playerScore = $game->calculatePlayerHand();
-?>
-
 <div class="text-center">
     <?php for ($i = 0; $i < count($dealerHand); $i++) : ?>
         <?php if (($game->getState() == State::PLACE_WAGER || $game->getState() == State::PLAYER) && $i == '0') : ?>
@@ -90,6 +89,61 @@ $playerScore = $game->calculatePlayerHand();
     <?php endfor; ?>
 </div>
 
+<br/>
+
+<div class="text-center">
+    <div class="btn-group" role="group" aria-label="Game controls">
+        <?php if ($game->canHit()): ?>
+            <button type="button" class="btn btn-primary" onclick="location.href='index.php?action=hit'">Hit</button>
+        <?php else : ?>
+            <button type="button" class="btn btn-primary disabled" disabled>Hit</button>
+        <?php endif; ?>
+
+        <?php if ($game->canUpdateWager()): ?>
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownWagerButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Wager
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownWagerButton">
+                    <?php foreach ($availableWagers as $wagerOption) : ?>
+                        <?php if ($game->getWager() === $wagerOption): ?>
+                            <a class="dropdown-item active"
+                               href="index.php?action=wager&amount=<?php echo $wagerOption ?>">
+                                <?php echo $wagerOption ?>
+                            </a>
+                        <?php else : ?>
+                            <a class="dropdown-item" href="index.php?action=wager&amount=<?php echo $wagerOption ?>">
+                                <?php echo $wagerOption ?>
+                            </a>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php else : ?>
+            <button class="btn btn-info dropdown-toggle disabled" disabled>
+                Wager: <?php echo $game->getWager() ?></button>
+        <?php endif; ?>
+
+        <?php if ($game->canDeal()): ?>
+            <button type="button" class="btn btn-success" onclick="location.href='index.php?action=deal'">Deal</button>
+        <?php else : ?>
+            <button type="button" class="btn btn-success disabled" disabled>Deal</button>
+        <?php endif; ?>
+
+        <?php if ($game->canStand()): ?>
+            <button type="button" class="btn btn-danger" onclick="location.href='index.php?action=stand'">Stand</button>
+        <?php else : ?>
+            <button type="button" class="btn btn-danger disabled" disabled>Stand</button>
+        <?php endif; ?>
+
+        <button type="button" class="btn btn-secondary" onclick="location.href='index.php?action=new'">New Round
+        </button>
+    </div>
+</div>
+
+<br/>
 
 <div class="text-center">
     <?php foreach ($playerHand as $card) : ?>
@@ -97,12 +151,14 @@ $playerScore = $game->calculatePlayerHand();
     <?php endforeach; ?>
 </div>
 
-<div>
-    <?php foreach ($game->getGameLog() as $message) : ?>
-        <p><?php echo $message ?></p>
-    <?php endforeach; ?>
+<div class="fixed-bottom">
+    <h3>Game Log</h3>
+    <div class="jumbotron" style="height: 250px; overflow:auto;">
+        <?php foreach (array_reverse($game->getGameLog()) as $message) : ?>
+            <p><?php echo $message ?></p>
+        <?php endforeach; ?>
+    </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
